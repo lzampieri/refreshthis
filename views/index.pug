@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1= title
+
+  a.btn.btn-success.m-1(href="/addwpgs") + New
+
+  div.custom-control.custom-switch.m-1
+    input.custom-control-input(type="checkbox" onchange="switchswitch()")#switch
+    label.custom-control-label(for="switch") Mostra eliminati
+
+  table(class='table table-hover')
+    thead
+      tr.row
+        th(class='col') Name
+        th(class='col-2') Timing
+        th(class='col-1') Start
+        th(class='col-1') Delete
+      tbody
+        each wpg in wpgs
+          tr.row(style=(wpg.deleted? "display: none" : "") class=(wpg.deleted? "delrows" : ""))
+            td.col= wpg.name
+            td.col-2= wpg.timing + "ms"
+            td.col-1
+              a.btn.btn-success(href="/run/"+wpg.id)
+                span.fa.fa-play
+            td.col-1
+              if wpg.deleted
+                a.btn.btn-danger(href="/udelete/"+wpg.id)
+                  span.fa.fa-trash
+              else
+                a.btn.btn-success(href="/delete/"+wpg.id)
+                  span.fa.fa-trash
+
+  script.
+    function switchswitch() {
+      if( $('#switch')[0].checked )
+        $('.delrows').show();
+      else
+        $('.delrows').hide();
+    }
