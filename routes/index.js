@@ -53,9 +53,10 @@ router.get('/run/:id', async function(req,res,next) {
   var wpg = await models.webpages.findOne( {where: {id: req.params.id}});
   // Check for wpg protocol: if is http:// force to redirect to un-secure protocol
   if( wpg.url.search("http:") >= 0 ) {
-    if( req.protocol.search("https") >= 0) {
+    if( req.protocol.search("s") >= 0) {
       var http_url = 'http://' + req.get('host') + req.originalUrl;
-      res.redirect(http_url);
+      console.log(http_url);
+      return res.redirect(http_url);
     }
   }
   res.render('run', {title: wpg.name, wpg: wpg});
