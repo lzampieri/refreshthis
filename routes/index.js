@@ -52,12 +52,9 @@ router.get('/udelete/:id', async function(req, res, next) {
 router.get('/run/:id', async function(req,res,next) {
   var wpg = await models.webpages.findOne( {where: {id: req.params.id}});
   // Check for wpg protocol: if is http:// force to redirect to un-secure protocol
-  console.log(wpg.url);
   if( wpg.url.search("http:") >= 0 ) {
-    console.log(req.protocol);
-    if( req.protocol.search("s") >= 0) {
-      var http_url = 'http://' + req.get('host') + req.originalUrl;
-      console.log(http_url);
+    if( ! req.query.hasOwnProperty('redirected') ) {
+      var http_url = 'http://' + req.get('host') + req.originalUrl + "?redirected";
       return res.redirect(http_url);
     }
   }
